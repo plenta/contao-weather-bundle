@@ -1,0 +1,39 @@
+{
+    "name": "plenta/contao-weather-bundle",
+    "type": "contao-bundle",
+    "description": "Small weather bundle for Contao",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Plenta.io",
+            "homepage": "https://plenta.io"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "ext-json": "*",
+        "contao/core-bundle": "^5.3"
+    },
+    "extra": {
+        "contao-manager-plugin": "Plenta\\ContaoWeatherBundle\\ContaoManager\\Plugin"
+    },
+    "autoload": {
+        "psr-4": {
+            "Plenta\\ContaoWeatherBundle\\": "src"
+        }
+    },
+    "conflict": {
+        "plenta/contao-jobs-basic-bundle": "1.*"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "contao-components/installer": true,
+            "contao/manager-plugin": true,
+            "contao-community-alliance/composer-plugin": true,
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

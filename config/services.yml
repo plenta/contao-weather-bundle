@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Plenta\ContaoWeatherBundle\:
+        resource: ../src/*
+        exclude: ../src/{Entity,Migrations,Resources,Tests}
+
+    Plenta\ContaoWeatherBundle\Helper\OpenWeatherHelper:
+        class: Plenta\ContaoWeatherBundle\Helper\OpenWeatherHelper

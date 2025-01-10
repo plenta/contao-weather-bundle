@@ -1,0 +1,12 @@
+{% if showWidget %}
+    {# indexer::stop #}
+    <div id="weather-widget" class="mod_weather-widget">
+        <div class="temp">{{ temp }} °C</div>
+        <div class="icon">
+            <img src="{{ asset('files/assets/wetter/' ~ icon ~ '.png') }}"
+                 alt="Quelle: openweathermap.org"
+                 title="Quelle: openweathermap.org">
+        </div>
+    </div>
+    {# indexer::continue #}
+{% endif %}
