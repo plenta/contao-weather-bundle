@@ -35,7 +35,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['plenta_weather_location'] = [
 $GLOBALS['TL_DCA']['tl_module']['fields']['plenta_weather_lat'] = [
     'exclude' => true,
     'inputType' => 'text',
-    'eval' => [array('maxlength' => 255, 'tl_class' => 'w50')],
+    'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
     'sql' => "varchar(255) NOT NULL default ''"
 ];
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2">
+    <file>
+        <body>
+            <trans-unit id="tl_module.plenta_weather_apikey.0">
+                <target>API key (openweathermap.org)</target>
+            </trans-unit>
+            <trans-unit id="tl_module.plenta_weather_apikey.1">
+                <target>Please enter the API key.</target>
+            </trans-unit>
+            <trans-unit id="tl_module.plenta_weather_location.0">
+                <target>Location</target>
+            </trans-unit>
+            <trans-unit id="tl_module.plenta_weather_location.1">
+                <target>Please enter a location</target>
+            </trans-unit>
+            <trans-unit id="tl_module.plenta_weather_lat.0">
+                <target>Latitude</target>
+            </trans-unit>
+            <trans-unit id="tl_module.plenta_weather_lat.1">
+                <target>Please enter the latitude.</target>
+            </trans-unit>
+            <trans-unit id="tl_module.plenta_weather_lng.0">
+                <target>Longitude</target>
+            </trans-unit>
+            <trans-unit id="tl_module.plenta_weather_lng.1">
+                <target>Please enter the longitude.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
