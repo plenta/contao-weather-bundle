@@ -45,7 +45,9 @@ class WeatherController extends AbstractFrontendModuleController
             $json = $this->openWeatherHelper->decodeJson($this->openWeatherHelper->readFile());
 
             if (!empty($this->openWeatherHelper->getInfo($json, 'temperature'))) {
-                $template->temp = number_format($this->openWeatherHelper->getInfo($json, 'temp'));
+                $template->temperature = number_format(
+                    (float) $this->openWeatherHelper->getInfo($json, 'temperature')
+                );
             }
 
             $template->icon = $this->openWeatherHelper->getInfo($json, 'icon');

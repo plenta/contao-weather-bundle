@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace Plenta\ContaoWeatherBundle\Helper;
 
-use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\System;
 use Contao\StringUtil;
+use Symfony\Component\HttpClient\HttpClient;
 
 class OpenWeatherHelper
 {
@@ -29,7 +29,7 @@ class OpenWeatherHelper
 
     private $units = 'metric';
 
-    private $url = 'https://api.openweathermap.org/data/2.5/weather?';
+    private string $url = 'https://api.openweathermap.org/data/2.5/weather?';
 
     public function __construct()
     {
@@ -99,122 +99,68 @@ class OpenWeatherHelper
         }
     }
 
-    public function getInfo($json, string $string)
+    public function getInfo($json, string $string): mixed
     {
         if (null !== $json && '' !== $string) {
             return match ($string) {
-                'coord'        => $json->coord,
-                'lon'          => $json->coord->lon ?? null,
-                'lat'          => $json->coord->lat ?? null,
-                'weather'      => $json->weather ?? null,
-                'main'         => $json->weather[0]->main ?? null,
-                'description'  => $json->weather[0]->description ?? null,
-                'icon'         => $json->weather[0]->icon ?? null,
-                'base'         => $json->base ?? null,
-                'temp'         => $json->main->temp ?? null,
-                'pressure'     => $json->main->pressure ?? null,
-                'humidity'     => $json->main->humidity ?? null,
-                'temp_min'     => $json->main->temp_min ?? null,
-                'temp_max'     => $json->main->temp_max ?? null,
-                'visibility'   => $json->visibility ?? null,
-                'wind'         => $json->wind ?? null,
-                'speed'        => $json->wind->speed ?? null,
-                'deg'          => $json->wind->deg ?? null,
-                'country'      => $json->sys->country ?? null,
-                'name'         => $json->name ?? null,
-                'cod'          => $json->cod ?? null,
-                default        => null,
+                'coord' => $json->coord,
+                'lon' => $json->coord->lon ?? null,
+                'lat' => $json->coord->lat ?? null,
+                'weather' => $json->weather ?? null,
+                'main' => $json->weather[0]->main ?? null,
+                'description' => $json->weather[0]->description ?? null,
+                'icon' => $json->weather[0]->icon ?? null,
+                'base' => $json->base ?? null,
+                'temperature' => $json->main->temp ?? null,
+                'pressure' => $json->main->pressure ?? null,
+                'humidity' => $json->main->humidity ?? null,
+                'temp_min' => $json->main->temp_min ?? null,
+                'temp_max' => $json->main->temp_max ?? null,
+                'visibility' => $json->visibility ?? null,
+                'wind' => $json->wind ?? null,
+                'speed' => $json->wind->speed ?? null,
+                'deg' => $json->wind->deg ?? null,
+                'country' => $json->sys->country ?? null,
+                'name' => $json->name ?? null,
+                'cod' => $json->cod ?? null,
+                default => null,
             };
-            /*
-            switch ($string) {
-                case 'coord':
-                    return $json->coord;
-                    break;
-                case 'lon':
-                    return $json->coord->lon;
-                    break;
-                case 'lat':
-                    return $json->coord->lat;
-                    break;
-                case 'weather':
-                    return $json->weather;
-                    break;
-                case 'main':
-                    return $json->weather[0]->main;
-                    break;
-                case 'description':
-                    return $json->weather[0]->description;
-                    break;
-                case 'icon':
-                    return $json->weather[0]->icon;
-                    break;
-                case 'base':
-                    return $json->base;
-                    break;
-                case 'temp':
-                    return $json->main->temp;
-                    break;
-                case 'pressure':
-                    return $json->main->pressure;
-                    break;
-                case 'humidity':
-                    return $json->main->humidity;
-                    break;
-                case 'temp_min':
-                    return $json->main->temp_min;
-                    break;
-                case 'temp_max':
-                    return $json->main->temp_max;
-                    break;
-                case 'visibility':
-                    return $json->visibility;
-                    break;
-                case 'wind':
-                    return $json->wind;
-                    break;
-                case 'speed':
-                    return $json->wind->speed;
-                    break;
-                case 'deg':
-                    return $json->wind->deg;
-                    break;
-                case 'country':
-                    return $json->sys->country;
-                    break;
-                case 'name':
-                    return $json->name;
-                    break;
-                case 'cod':
-                    return $json->cod;
-                    break;
-            }
-            */
         }
+
+        return null;
     }
 
     private function getWeatherData($params)
     {
-        $url = $this->url.''.$params.'&units='.$this->units.'&lang='.$this->language.'&appid='.$this->key;
+        $url = sprintf(
+            '%s%s&units=%s&lang=%s&appid=%s',
+            $this->url,
+            $params,
+            $this->units,
+            $this->language,
+            $this->key
+        );
 
-        $curl = curl_init();
+        $client = HttpClient::create();
 
-        curl_setopt($curl, CURLOPT_HTTPHEADER, []);
-        curl_setopt($curl, CURLOPT_HEADER, false);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        try {
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+                'timeout' => 30,
+            ]);
 
-        $json = curl_exec($curl);
+            dump($response);
 
-        if (!$json) {
-            curl_close($curl);
+            if (200 !== $response->getStatusCode()) {
+                return null;
+            }
 
+            return $response->getContent();
+        } catch (\Exception $e) {
             return null;
         }
-
-        curl_close($curl);
-
-        return $json;
     }
 
     public function getFilePath()

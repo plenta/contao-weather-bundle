@@ -1,11 +1,11 @@
 {% if showWidget %}
     {# indexer::stop #}
     <div id="weather-widget" class="mod_weather-widget">
-        <div class="temp">{{ temp }} °C</div>
+        <div class="temp">{{ temperature }} °C</div>
         <div class="icon">
-            <img src="bundles/plentacontaoweather/' ~ icon ~ '.png') }}"
-                 alt="Quelle: openweathermap.org"
-                 title="Quelle: openweathermap.org">
+            <img src="/bundles/plentacontaoweather/{{ icon }}.png"
+                 alt="openweathermap.org"
+                 title="openweathermap.org">
         </div>
     </div>
     {# indexer::continue #}
