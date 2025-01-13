@@ -151,8 +151,6 @@ class OpenWeatherHelper
                 'timeout' => 30,
             ]);
 
-            dump($response);
-
             if (200 !== $response->getStatusCode()) {
                 return null;
             }
