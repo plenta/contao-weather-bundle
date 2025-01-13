@@ -28,7 +28,6 @@ class WeatherController extends AbstractFrontendModuleController
 
     function getResponse(Template $template, ModuleModel $model, Request $request): Response
     {
-        $data = null;
         $template->showWidget = false;
 
         $this->openWeatherHelper->setApiKey($model->plenta_weather_apikey);
@@ -36,7 +35,7 @@ class WeatherController extends AbstractFrontendModuleController
         if (!empty($model->plenta_weather_lat) && !empty($model->plenta_weather_lng)) {
             $data = $this->openWeatherHelper->getByCoordinates($model->plenta_weather_lat, $model->plenta_weather_lng);
         } else {
-            // plenta_weather_location
+            $data = $this->openWeatherHelper->getByCity($this->plenta_weather_location);
         }
 
         if (!is_null($data)) {
@@ -49,7 +48,7 @@ class WeatherController extends AbstractFrontendModuleController
                 $template->temp = number_format($this->openWeatherHelper->getInfo($json, 'temp'));
             }
 
-            $this->Template->icon = $this->openWeatherHelper->getInfo($json, 'icon');
+            $template->icon = $this->openWeatherHelper->getInfo($json, 'icon');
         }
 
         return $template->getResponse();

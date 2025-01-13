@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Plenta\ContaoWeatherBundle\Helper;
 
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\System;
 use Contao\StringUtil;
 
@@ -20,7 +21,7 @@ class OpenWeatherHelper
 
     private int $fileTime = 60;
 
-    private string $filePath = TL_ROOT.'/web/share/wetter.json';
+    private string $filePath;
 
     private string $country = 'de';
 
@@ -32,6 +33,7 @@ class OpenWeatherHelper
 
     public function __construct()
     {
+        $this->filePath = System::getContainer()->getParameter('contao.web_dir'). '/share/wetter.json';
     }
 
     public function setApiKey(string $key): void
@@ -97,9 +99,33 @@ class OpenWeatherHelper
         }
     }
 
-    public function getInfo($json, $string)
+    public function getInfo($json, string $string)
     {
         if (null !== $json && '' !== $string) {
+            return match ($string) {
+                'coord'        => $json->coord,
+                'lon'          => $json->coord->lon ?? null,
+                'lat'          => $json->coord->lat ?? null,
+                'weather'      => $json->weather ?? null,
+                'main'         => $json->weather[0]->main ?? null,
+                'description'  => $json->weather[0]->description ?? null,
+                'icon'         => $json->weather[0]->icon ?? null,
+                'base'         => $json->base ?? null,
+                'temp'         => $json->main->temp ?? null,
+                'pressure'     => $json->main->pressure ?? null,
+                'humidity'     => $json->main->humidity ?? null,
+                'temp_min'     => $json->main->temp_min ?? null,
+                'temp_max'     => $json->main->temp_max ?? null,
+                'visibility'   => $json->visibility ?? null,
+                'wind'         => $json->wind ?? null,
+                'speed'        => $json->wind->speed ?? null,
+                'deg'          => $json->wind->deg ?? null,
+                'country'      => $json->sys->country ?? null,
+                'name'         => $json->name ?? null,
+                'cod'          => $json->cod ?? null,
+                default        => null,
+            };
+            /*
             switch ($string) {
                 case 'coord':
                     return $json->coord;
@@ -162,6 +188,7 @@ class OpenWeatherHelper
                     return $json->cod;
                     break;
             }
+            */
         }
     }
 
@@ -192,6 +219,8 @@ class OpenWeatherHelper
 
     public function getFilePath()
     {
-        return StringUtil::stripRootDir(System::getContainer()->getParameter('contao.web_dir')) . '/share/' . 'wetter.xml';
+        return StringUtil::stripRootDir(
+            System::getContainer()->getParameter('contao.web_dir')
+            ).'/share/'.'wetter.xml';
     }
 }
